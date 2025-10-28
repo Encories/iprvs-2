@@ -1,0 +1,60 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+.eggs/
+.cache/
+.pytest_cache/
+.mypy_cache/
+.pytype/
+.ipynb_checkpoints/
+
+# Build/Dist
+build/
+dist/
+wheelhouse/
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+.python-version
+
+# Coverage/Reports
+.coverage*
+coverage.xml
+htmlcov/
+
+# Logs
+logs/
+*.log
+
+# Environment & secrets
+.env
+*.env
+.env.*
+.envrc
+
+# SQLite databases
+bybit_trading_bot/storage/*.sqlite
+bybit_trading_bot/storage/database.sqlite
+*.sqlite
+*.db
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE/Editor
+.vscode/
+.idea/
+*.code-workspace
+
+# Tox
+.tox/
+
+

@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.venv/
+.env
+
+# SQLite DB
+bybit_trading_bot/storage/database.sqlite
+
+# OS / IDE
+.DS_Store
+.idea/
+.vscode/ 
