@@ -745,23 +745,30 @@ class MarketMonitor:
 
         # Scalp 5m mode branch
         if self.config.switch_mode == "scalp_5m":
+            # Use v2 async engine (live only)
             try:
-                from bybit_trading_bot.core.scalp5m_engine import Scalp5mEngine
+                import asyncio
+                from bybit_trading_bot_v2.core.strategy_engine import StrategyEngine as V2Engine
             except Exception as e:
-                self.logger.error(f"Failed to import Scalp5mEngine: {e}")
+                self.logger.error(f"Failed to import v2 StrategyEngine: {e}")
                 return
             try:
-                engine = Scalp5mEngine(self.config, self.db, self.notifier)
-                # persist engine instance for graceful stop
+                engine = V2Engine(self.config, self.db, self.notifier)
                 self._scalp_engine = engine  # type: ignore[attr-defined]
-                t = threading.Thread(target=engine.run, name="Scalp5mEngine", daemon=True)
+                # Run asyncio loop in a dedicated thread
+                def _runner() -> None:
+                    try:
+                        asyncio.run(engine.run())
+                    except Exception as e:
+                        self.logger.error(f"v2 engine crashed: {e}")
+                t = threading.Thread(target=_runner, name="Scalp5mV2", daemon=True)
                 self._threads = [t]
                 t.start()
                 self.is_running = True
-                self.logger.info("MarketMonitor started (scalp_5m mode)")
+                self.logger.info("MarketMonitor started (scalp_5m v2)")
                 return
             except Exception as e:
-                self.logger.error(f"Failed to start scalp_5m engine: {e}")
+                self.logger.error(f"Failed to start scalp_5m v2 engine: {e}")
                 return
 
         # Build mapping once at startup

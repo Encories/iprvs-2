@@ -166,6 +166,21 @@ class Config:
     test_scalp: bool
     test_scalp_all: bool
     scalp_diag_each_tick: bool
+    # V2 strategy params (Volume Breakout / Risk / Execution)
+    vb_ema_period: int
+    vb_trend_ema_h1: int
+    vb_min_rvol: float
+    vb_confidence_threshold: float
+    vb_pullback_tolerance_pct: float
+    base_position_size: float
+    adaptive_leverage_max: float
+    confidence_multiplier: bool
+    win_rate_adaptation: bool
+    daily_loss_limit: float
+    quick_tp_pct: float
+    runner_tp_pct: float
+    max_position_pct: float
+    min_market_volatility: float
 
 
 def _get_bool(value: str | None, default: bool) -> bool:
@@ -350,6 +365,30 @@ def load_settings() -> Config:
     test_scalp = _get_bool(os.getenv("TEST_SCALP"), False)
     test_scalp_all = _get_bool(os.getenv("TEST_SCALP_ALL"), False)
     scalp_diag_each_tick = _get_bool(os.getenv("SCALP_DIAG_EACH_TICK"), False)
+    # V2 strategy params
+    vb_ema_period = int(os.getenv("VB_EMA_PERIOD", "21"))
+    vb_trend_ema_h1 = int(os.getenv("VB_TREND_EMA_H1", "50"))
+    vb_min_rvol = float(os.getenv("VB_MIN_RVOL", "1.3"))
+    vb_confidence_threshold = float(os.getenv("VB_CONFIDENCE_THRESHOLD", "1.2"))
+    vb_pullback_tolerance_pct = float(os.getenv("VB_PULLBACK_TOLERANCE_PCT", "0.15"))
+    base_position_size = float(os.getenv("BASE_POSITION_SIZE", "50"))
+    adaptive_leverage_max = float(os.getenv("ADAPTIVE_LEVERAGE_MAX", "7"))
+    confidence_multiplier = _get_bool(os.getenv("CONFIDENCE_MULTIPLIER"), True)
+    win_rate_adaptation = _get_bool(os.getenv("WIN_RATE_ADAPTATION"), True)
+    daily_loss_limit = float(os.getenv("DAILY_LOSS_LIMIT", "3"))
+    quick_tp_pct = float(os.getenv("QUICK_TP_PCT", "0.6"))
+    runner_tp_pct = float(os.getenv("RUNNER_TP_PCT", "1.2"))
+    max_position_pct = float(os.getenv("MAX_POSITION_PCT", "5.0"))
+    min_market_volatility = float(os.getenv("MIN_MARKET_VOLATILITY", "0.5"))
+    # Commission envs
+    bybit_taker_fee = float(os.getenv("BYBIT_TAKER_FEE", "0.00055"))
+    bybit_maker_fee = float(os.getenv("BYBIT_MAKER_FEE", "0.0002"))
+    total_trade_cost = float(os.getenv("TOTAL_TRADE_COST", "0.00075"))
+    commission_validation = _get_bool(os.getenv("COMMISSION_VALIDATION"), True)
+    min_net_profit_pct = float(os.getenv("MIN_NET_PROFIT_PCT", "0.002"))
+    min_profit_buffer = float(os.getenv("MIN_PROFIT_BUFFER", "0.001"))
+    slippage_buffer = float(os.getenv("SLIPPAGE_BUFFER", "0.0005"))
+    emergency_exit_threshold = float(os.getenv("EMERGENCY_EXIT_THRESHOLD", "0.002"))
     if drawdown_exit_threshold_pct <= 0 or drawdown_exit_threshold_pct > 50:
         try:
             print(f"WARNING: Invalid DRAWDOWN_EXIT_THRESHOLD_PCT={drawdown_exit_threshold_pct}, using 10.0%")
@@ -494,4 +533,26 @@ def load_settings() -> Config:
         test_scalp=test_scalp,
         test_scalp_all=test_scalp_all,
         scalp_diag_each_tick=scalp_diag_each_tick,
+        vb_ema_period=vb_ema_period,
+        vb_trend_ema_h1=vb_trend_ema_h1,
+        vb_min_rvol=vb_min_rvol,
+        vb_confidence_threshold=vb_confidence_threshold,
+        vb_pullback_tolerance_pct=vb_pullback_tolerance_pct,
+        base_position_size=base_position_size,
+        adaptive_leverage_max=adaptive_leverage_max,
+        confidence_multiplier=confidence_multiplier,
+        win_rate_adaptation=win_rate_adaptation,
+        daily_loss_limit=daily_loss_limit,
+        quick_tp_pct=quick_tp_pct,
+        runner_tp_pct=runner_tp_pct,
+        max_position_pct=max_position_pct,
+        min_market_volatility=min_market_volatility,
+        bybit_taker_fee=bybit_taker_fee,
+        bybit_maker_fee=bybit_maker_fee,
+        total_trade_cost=total_trade_cost,
+        commission_validation=commission_validation,
+        min_net_profit_pct=min_net_profit_pct,
+        min_profit_buffer=min_profit_buffer,
+        slippage_buffer=slippage_buffer,
+        emergency_exit_threshold=emergency_exit_threshold,
     ) 
