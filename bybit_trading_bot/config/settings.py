@@ -181,6 +181,15 @@ class Config:
     runner_tp_pct: float
     max_position_pct: float
     min_market_volatility: float
+    # Commission / validation
+    bybit_taker_fee: float
+    bybit_maker_fee: float
+    total_trade_cost: float
+    commission_validation: bool
+    min_net_profit_pct: float
+    min_profit_buffer: float
+    slippage_buffer: float
+    emergency_exit_threshold: float
 
 
 def _get_bool(value: str | None, default: bool) -> bool:

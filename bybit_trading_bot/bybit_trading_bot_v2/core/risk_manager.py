@@ -54,7 +54,13 @@ class RiskManager:
         notional = self._base_notional(sig.confidence)
         lev = float(getattr(self.config, "adaptive_leverage_max", 5.0))
         qty_notional = (notional * lev) / max(1e-12, entry)
-        qty = max(0.0, max(qty_risk, qty_notional))
+        # Strict risk-first sizing: notional cannot exceed per-trade risk
+        if qty_notional > 0.0 and qty_risk > 0.0:
+            qty = min(qty_risk, qty_notional)
+        elif qty_risk > 0.0:
+            qty = qty_risk
+        else:
+            qty = max(0.0, qty_notional)
         # Cap to 5% balance notionally
         max_pct = float(getattr(self.config, "max_position_pct", 5.0))
         cap_qty = ((self.config.account_equity_usdt * max_pct / 100.0) * lev) / max(1e-12, entry)
